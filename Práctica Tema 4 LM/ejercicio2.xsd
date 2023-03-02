@@ -1,0 +1,111 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="discos" type="elementosDisco"/>
+    <xs:complexType name="elementosDisco">
+        <xs:sequence>
+            <xs:element name="grupo" type="elementosGrupo" maxOccurs="unbounded"/>
+            <xs:element name="disco" type="elementoDiscos" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="elementosGrupo">
+        <xs:sequence>
+            <xs:element name="nombre" type="caracteresMaximos"/>
+            <xs:element name="miembro" maxOccurs="unbounded" type="caracteresMaximos"/>
+            <xs:element name="nacionalidad" minOccurs="0" type="caracteresMaximos"/>
+            <xs:choice minOccurs="0">
+                <xs:sequence>
+                    <xs:element name="web">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:pattern value="www.ponprecioamimusica.org/[a-z]+"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="email">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:pattern value="[a-z][\w_.]+@ponprecioamimusica.org"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element name="calle" type="caracteresMaximos"/>
+                    <xs:element name="localidad" type="caracteresMaximos"/>
+                </xs:sequence>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="nom" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="elementoDiscos">
+        <xs:sequence>
+            <xs:element name="interprete">
+                <xs:complexType>
+                    <xs:attribute name="nom" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="titulo" type="caracteresMaximos"/>
+            <xs:element name="discografica" minOccurs="0" default="CBS">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Sony"/>
+                        <xs:enumeration value="CBS"/>
+                        <xs:enumeration value="SIRE"/>
+                        <xs:enumeration value="OTRAS"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="anio">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="tamanioAnio">
+                            <xs:attribute name="mes" type="meses" use="optional"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="stock">
+                <xs:simpleType>
+                    <xs:restriction base="xs:integer">
+                        <xs:minInclusive value="0"/>
+                        <xs:maxInclusive value="200"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="precio" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="\d+.\d{2}"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:simpleType name="tamanioAnio">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="1000"/>
+            <xs:maxInclusive value="9999"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="meses">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="enero"/>
+            <xs:enumeration value="febrero"/>
+            <xs:enumeration value="marzo"/>
+            <xs:enumeration value="abril"/>
+            <xs:enumeration value="mayo"/>
+            <xs:enumeration value="junio"/>
+            <xs:enumeration value="julio"/>
+            <xs:enumeration value="agosto"/>
+            <xs:enumeration value="septiembre"/>
+            <xs:enumeration value="octubre"/>
+            <xs:enumeration value="noviembre"/>
+            <xs:enumeration value="diciembre"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="caracteresMaximos">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
